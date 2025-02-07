@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>幸运彩票助手</title>
+    <style>
+        body { 
+            font-family: '微软雅黑', sans-serif; 
+            background: #f5f5f5;
+            margin: 0;
+            padding: 15px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h2 {
+            color: #e4393c;
+            text-align: center;
+            margin: 10px 0;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            margin: 5px 0;
+            border: none;
+            border-radius: 8px;
+            background: #e4393c;
+            color: white;
+        }
+        #result {
+            font-size: 14px;
+            line-height: 1.6;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        .contact {
+            text-align: center;
+            color: #666;
+            font-size: 12px;
+            padding-top: 15px;
+            border-top: 1px dashed #ddd;
+        }
+        .red { color: #e4393c; }
+        .blue { color: #2196f3; }
+        .warning {
+            color: #666;
+            font-size: 12px;
+            text-align: center;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>🎉 幸运智能选号</h2>
+
+        <button onclick="generateDLT()">生成大乐透5注</button>
+        <button onclick="generatePL3()">生成排列三5注</button>
+        <button onclick="generatePL5()">生成排列五5注</button>
+        <button onclick="generate7Star()" style="background:#4CAF50;">生成七星彩5注</button>
+
+        <div id="result">点击按钮生成推荐号码</div>
+
+        <div class="warning">本工具结果仅供参考，不构成购彩建议，请理性投注</div>
+
+        <div class="contact">
+            <p>📞 18267641706（微信同号）</p>
+            <p>📍 台州椒江 | 实体店保障</p>
+            <button onclick="share()" style="background:#07c160; margin-top:10px;">点击分享给好友</button>
+        </div>
+    </div>
+
+    <script>
+        // ======================
+        // 大乐透（前区1-35选5，后区1-12选2）
+        // ======================
+        function generateDLT() {
+            let output = '<div class="red">【大乐透推荐5注】</div>';
+            for(let i=0; i<5; i++){
+                let front = generateUnique(35,5).map(n => n.toString().padStart(2,'0'));
+                let back = generateUnique(12,2).map(n => n.toString().padStart(2,'0'));
+                output += `前区：${front.join(' ')} | 后区：${back.join(' ')}<br>`;
+            }
+            showResult(output);
+        }
+
+        // ======================
+        // 排列三（0-9选3，可重复）
+        // ======================
+        function generatePL3() {
+            let output = '<div class="red">【排列三推荐5注】</div>';
+            for(let i=0; i<5; i++){
+                output += Array.from({length:3}, () => 
+                    Math.floor(Math.random()*10)
+                ).join(' ') + '<br>';
+            }
+            showResult(output);
+        }
+
+        // ======================
+        // 排列五（0-9选5，可重复）
+        // ======================
+        function generatePL5() {
+            let output = '<div class="red">【排列五推荐5注】</div>';
+            for(let i=0; i<5; i++){
+                output += Array.from({length:5}, () => 
+                    Math.floor(Math.random()*10)
+                ).join(' ') + '<br>';
+            }
+            showResult(output);
+        }
+
+        // ======================
+        // 七星彩（前7位0-9，后区0-14）
+        // ======================
+        function generate7Star() {
+            let output = '<div class="blue">【七星彩推荐5注】</div>';
+            for(let i=0; i<5; i++){
+                let front = Array.from({length:7}, () => 
+                    Math.floor(Math.random()*10)
+                );
+                let back = Math.floor(Math.random()*15);
+                output += front.join(' ') + ` | 后区：${back}<br>`;
+            }
+            showResult(output);
+        }
+
+        // ======================
+        // 通用工具函数
+        // ======================
+        function generateUnique(max, count) {
+            let nums = new Set();
+            while(nums.size < count) {
+                nums.add(Math.floor(Math.random()*max) + 1);
+            }
+            return [...nums].sort((a,b) => a - b);
+        }
+
+        function showResult(content) {
+            document.getElementById('result').innerHTML = content;
+        }
+
+        function share() {
+            const text = `来自幸运彩票店的智能推荐：\n${document.getElementById('result').innerText}\n联系：18267641706`;
+            if(navigator.share) {
+                navigator.share({ text: text });
+            } else {
+                prompt("请手动复制分享内容：", text);
+            }
+        }
+    </script>
+</body>
+</html>
